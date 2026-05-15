@@ -1,0 +1,128 @@
+/* study-card.css */
+
+.study-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 720px;
+
+  padding: 36px 28px;
+
+  border-radius: 16px;
+
+  text-align: center;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* основной текст */
+
+.study-card__main-text {
+  font-size: 56px;
+  font-weight: 700;
+
+  line-height: 1.2;
+  word-break: break-word;
+
+  color: #1d4ed8;
+}
+
+/* блок ответа */
+
+.study-card__answer-block {
+  margin-top: 24px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+/* слово */
+
+.study-card__answer-word {
+  font-size: 44px;
+  font-weight: 700;
+
+  color: #2563eb;
+}
+
+/* перевод */
+
+.study-card__answer-translate {
+  font-size: 36px;
+  font-weight: 700;
+
+  color: #16a34a;
+}
+
+/* транскрипция */
+
+.study-card__answer-transcription {
+  font-size: 26px;
+
+  color: #9333ea;
+}
+
+/* контекст */
+
+.study-card__answer-context {
+  font-size: 22px;
+
+  color: #ea580c;
+}
+
+/* кнопки */
+
+.study-card__buttons {
+  margin-top: 28px;
+}
+
+.study-card__button {
+  padding: 12px 24px;
+  margin: 6px;
+
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  background: #111827;
+  color: white;
+}
+
+.study-card__button:hover {
+  opacity: 0.9;
+}
+
+/* мобильная версия */
+
+@media (max-width: 640px) {
+  .study-card__main-text {
+    font-size: 40px;
+  }
+
+  .study-card__answer-word {
+    font-size: 34px;
+  }
+
+  .study-card__answer-translate {
+    font-size: 28px;
+  }
+
+  .study-card__answer-transcription {
+    font-size: 22px;
+  }
+
+  .study-card__answer-context {
+    font-size: 20px;
+  }
+
+  .study-card__button {
+    width: 100%;
+    margin: 6px 0;
+  }
+}

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Words</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial;
+      background: #f2f2f2;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      text-align: center;
+    }
+
+    .word {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .translate {
+      font-size: 22px;
+      margin-top: 10px;
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div id="content">
+    <div class="word" id="word"></div>
+    <div class="translate" id="translate"></div>
+
+    <div class="buttons">
+      <button onclick="prev()">Назад</button>
+      <button onclick="next()">Далее</button>
+    </div>
+  </div>
+
+  <div id="finish" style="display:none;">
+    <button onclick="repeat()">Повторить</button>
+  </div>
+
+  <div id="repeat-mode" style="display:none;">
+    <div class="word" id="repeat-main"></div>
+    <div class="translate" id="repeat-extra" style="display:none;"></div>
+
+    <div class="buttons" id="repeat-buttons">
+      <button onclick="rememberWord(true)">Помню</button>
+      <button onclick="rememberWord(false)">Не помню</button>
+    </div>
+
+    <div class="buttons" id="next-after-fail" style="display:none;">
+      <button onclick="nextRepeatWord()">Далее</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let words = []
+let index = 0
+
+let repeatIndex = 0
+let repeatResults = []
+let repeatStage = 1
+
+const userId = new URLSearchParams(window.location.search).get("user_id") || 1
+
+async function load() {
+  const res = await fetch("/api/dictionary")
+  const data = await res.json()
+
+  words = data.words || []
+  render()
+}
+
+function render() {
+  if (index >= words.length) {
+    document.getElementById("content").style.display = "none"
+    document.getElementById("finish").style.display = "block"
+
+    sendResults(
+      words.map(w => ({
+        user_id: Number(userId),
+        id_word: w.id,
+        result: true
+      }))
+    )
+    return
+  }
+
+  document.getElementById("word").innerText = words[index].word
+  document.getElementById("translate").innerText = words[index].translate
+}
+
+function next() {
+  index++
+  render()
+}
+
+function prev() {
+  if (index > 0) {
+    index--
+    render()
+  }
+}
+
+function repeat() {
+  repeatIndex = 0
+  repeatStage = 1
+  repeatResults = []
+
+  document.getElementById("finish").style.display = "none"
+  document.getElementById("content").style.display = "none"
+  document.getElementById("repeat-mode").style.display = "block"
+
+  renderRepeatWord()
+}
+
+function renderRepeatWord() {
+  if (repeatIndex >= words.length) {
+    if (repeatStage === 1) {
+      repeatStage = 2
+      repeatIndex = 0
+    } else {
+      document.getElementById("repeat-mode").innerHTML = "<div class='word'>Готово</div>"
+      sendResults(repeatResults)
+      return
+    }
+  }
+
+  const currentWord = words[repeatIndex]
+  const repeatMain = document.getElementById("repeat-main")
+  const repeatExtra = document.getElementById("repeat-extra")
+  const repeatButtons = document.getElementById("repeat-buttons")
+  const nextAfterFail = document.getElementById("next-after-fail")
+
+  if (repeatStage === 1) {
+    repeatMain.innerText = currentWord.word
+  } else {
+    repeatMain.innerText = currentWord.translate
+  }
+
+  repeatExtra.innerText = ""
+  repeatExtra.style.display = "none"
+  repeatButtons.style.display = "block"
+  nextAfterFail.style.display = "none"
+}
+
+function rememberWord(result) {
+  const currentWord = words[repeatIndex]
+
+  repeatResults.push({
+    user_id: Number(userId),
+    id_word: currentWord.id,
+    result: result
+  })
+
+  if (result) {
+    repeatIndex++
+    renderRepeatWord()
+    return
+  }
+
+  const repeatExtra = document.getElementById("repeat-extra")
+  const repeatButtons = document.getElementById("repeat-buttons")
+  const nextAfterFail = document.getElementById("next-after-fail")
+
+  if (repeatStage === 1) {
+    repeatExtra.innerText = currentWord.translate
+  } else {
+    repeatExtra.innerText = currentWord.word
+  }
+
+  repeatExtra.style.display = "block"
+  repeatButtons.style.display = "none"
+  nextAfterFail.style.display = "block"
+}
+
+function nextRepeatWord() {
+  repeatIndex++
+  renderRepeatWord()
+}
+
+async function sendResults(payload) {
+  await fetch("/api/repeat-result", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+}
+
+load()
+</script>
+
+</body>
+</html>
