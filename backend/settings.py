@@ -1,3 +1,4 @@
+from pathlib import Path
 
 COMMON_DIC_ID=0 #номер словаря, когда будут больше ботов будут другие ид
 QUANTITY_WORDS_FOR_MEMORIZE=5
@@ -17,3 +18,6 @@ TOKEN_WORDS_ENG= '8611555695:AAH6aYfnwX9AfZD3v4FiA7k8aAWV3A4H380'#superman_learn
 TOKEN_SKILLS='8771434024:AAFVl4JqQzERdrGOmYlATkwZyyjufkd9Ba4'#superman_couch_bot superman_couch
 HOST="0.0.0.0"
 PORT=8000
+BASE_DIR = Path(__file__).resolve().parent
+
+DATABASE_URL = f"sqlite:///{BASE_DIR / 'superman.db'}"

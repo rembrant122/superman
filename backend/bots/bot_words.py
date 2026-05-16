@@ -156,7 +156,7 @@ async def notif(notify_enabled:bool,message: Message):
 
     await message.answer(
         f"🔔 Напоминания {t}",
-        reply_markup=get_main_menu(user,False),
+        reply_markup=get_main_menu(user,notify_enabled),
     )
 
 @router.message(F.text == MainMenuEnums.STOP_NOTIF.value)
@@ -172,3 +172,6 @@ dp.include_router(router)
 
 async def run_bot() -> None:
     await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(run_bot())
