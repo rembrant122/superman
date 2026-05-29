@@ -1,6 +1,6 @@
 from flask import request
 
-from db.db_all import User
+from db.user import User
 from sqlalchemy.orm import Session
 
 def get_user(session:Session) -> User:

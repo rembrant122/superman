@@ -1,4 +1,3 @@
-import secrets
 from datetime import datetime, UTC
 from typing import cast
 
@@ -12,50 +11,15 @@ from sqlalchemy.orm import (
 )
 from sqlalchemy.orm import relationship
 
-from SkillType import SkillType
+from enums import SkillType
 from db.db_basic import AutomatisationDataBase, engine
-from models import WordModel
+from db.user import User
+from models_superman import WordModel
 from steps import get_next_step_time
-
-
-def generate_token() -> str:
-    return secrets.token_hex(16)
 
 
 def now_utc() -> datetime:
     return datetime.now(UTC)
-
-
-class User(AutomatisationDataBase):
-    __tablename__ = "users"
-
-    tg_id: Mapped[str] = mapped_column(String, unique=True)
-    tg_login: Mapped[str] = mapped_column(String, default="")
-
-    skills: Mapped[list["Skill"]] = relationship(
-        "Skill",
-        back_populates="user",
-        cascade="all, delete-orphan",
-    )
-
-    ready_skills: Mapped[list["Skill"]] = relationship(
-        "Skill",
-        primaryjoin=lambda: and_(
-            User.id == Skill.user_id,
-            Skill.next_date_time_for_repeat <= func.now(),
-            Skill.stage > 0,
-        ),
-        viewonly=True,
-        lazy="select",
-    )
-
-    token: Mapped[str] = mapped_column(String, default=generate_token)
-
-    notify_for_skills_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
-    notify_for_skills_already_sent: Mapped[bool] = mapped_column(
-        Boolean,
-        default=False,
-    )  # после того как отправили - ставит True, после повторения - снова False
 
 
 class Word(AutomatisationDataBase):
@@ -227,39 +191,22 @@ class Dictionary(AutomatisationDataBase):
 # ----- USERS -----
 
 
-def register_user(session: Session,tg_id: int, tg_login: str) -> "User":
-    user = User.find_by(session,tg_id=str(tg_id)).first()
-
-    if user is None:
-        user = User.add_something(session,
-            tg_id=str(tg_id),
-            tg_login=tg_login,
-        )
-    return user
-
-
-def get_users_for_reminder(session: Session) -> list[User]:
-    l_us = (session.query(User).
-            join(Skill, Skill.user_id == User.id).
-            filter(Skill.next_date_time_for_repeat <= func.now(), Skill.stage > 0, ).all())
-    return cast(list[User],l_us)
-
 def get_notify_status(session: Session,tg_id: int) -> bool:
-    user = User.find_by(session,tg_id=str(tg_id)).first()
+    user = User.find_by(session, tg_id=str(tg_id)).first()
     return user.notify_for_skills_enabled if user else True
 
 # ----- SKILLS -----
 
 def add_or_update_skill(session: Session,
-    user: User,
-    skill_name: str,
-    count_elements: int | None,
-    time_show: int,
-    time_for_remember: int,
-    skill_type: SkillType,
-    description: str,
-    instruction: str,
-) -> Skill:
+                        user: User,
+                        skill_name: str,
+                        count_elements: int | None,
+                        time_show: int,
+                        time_for_remember: int,
+                        skill_type: SkillType,
+                        description: str,
+                        instruction: str,
+                        ) -> Skill:
 
     skill_instance:Skill = Skill.find_by(session,user_id=user.id, skill_name=skill_name).first()
 
@@ -287,7 +234,7 @@ def add_or_update_skill(session: Session,
     return cast(Skill, skill_instance)
 
 
-def delete_skill(session: Session,user: User, skill_name: str) -> None:
+def delete_skill(session: Session, user: User, skill_name: str) -> None:
     Skill.find_by(session,user_id=user.id, skill_name=skill_name).first().delete(session)
 
 
@@ -309,17 +256,6 @@ def get_list_words_for_memorize_from_db(session,
     )
 
 
-def get_users_with_ready_words_for_notify(session:Session) -> list[User]:
-    l_us=(((session.query(User).join(Dictionary, Dictionary.user_id == User.id)
-          .join(Word, Word.dict_id == Dictionary.id)).filter(
-            Dictionary.notify_enabled.is_(True),
-            Dictionary.notify_already_sent.is_(False),
-            Word.next_date_time_for_repeat <= func.now(),
-            Word.stage > 0,
-        )).distinct()).all()
-    return cast(list[User],l_us)
-
-
 def get_skill_for_memorize_db(session, user_id: int, stage_depend_skill_for_get=5) -> Skill | None:
     return (
         session.query(Skill)
@@ -339,10 +275,10 @@ def get_skill_for_memorize_db(session, user_id: int, stage_depend_skill_for_get=
     )
 
 def add_words(session:Session,
-    common_dct: CommonDictionary,
-    user: User,
-    words: list[WordModel],
-) -> None:
+              common_dct: CommonDictionary,
+              user: User,
+              words: list[WordModel],
+              ) -> None:
     dct: Dictionary | None   = Dictionary.find_by(session,
         common_dictionary_id=common_dct.id,
         user_id=user.id,
@@ -394,7 +330,7 @@ def get_users_with_ready_words(session: Session, common_dictionary_id: int) -> l
         .distinct()
         .all()
     )
-    return cast(list[User],l_us)
+    return cast(list[User], l_us)
 
 def create_db() -> None:
     AutomatisationDataBase.metadata.create_all(bind=engine)
