@@ -142,7 +142,8 @@ const skillStageReverse: RepeatStageConfig = {
     return item.instruction || item.skill_name
   },
 }
-
+потому что я друг а не враг
+и ты мне нравишься
 // ========================================
 // Набор стадий по режиму.
 //

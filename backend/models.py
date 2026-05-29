@@ -33,15 +33,20 @@ class DictionaryModel(AutomatisationBaseModel):
 class ListWordsModel(AutomatisationBaseModel):
 
     words: list[WordModel] = []
-    stage: StageType
+    # stage: StageType
+
+class ListWordsIdModel(AutomatisationBaseModel):
+    words_id: list[int]
 
 class ResultRepeatWord(AutomatisationBaseModel):
 
     id_word: int
     result: bool
-class ForgotWord(AutomatisationBaseModel):
+
+class WordId(AutomatisationBaseModel):
 
     id_word: int
+    result: bool
 
 class ResultRepeatSkill(AutomatisationBaseModel):
 
@@ -56,8 +61,9 @@ class SkillModel(AutomatisationBaseModel):
     skill_name: str
     time_show:int
     time_for_remember:int
-    type:SkillType
+    skill_type:SkillType
 
+    items:list[str]|None=None
 
 def parse_words_string(value: str) -> list[WordModel] | bool:
     try:

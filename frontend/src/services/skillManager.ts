@@ -1,0 +1,51 @@
+import {ref} from "vue";
+import type {WordStudySession} from "../models/words";
+import {StudyState} from "../models/words";
+import {SkillModel, SkillStudySession} from "../models/skills";
+import {request} from "../api";
+import {shuffleArray} from "./shuffleArray";
+
+export const skillStudySession = ref<SkillStudySession>({
+  skills: [],
+  skillNow: null,
+  result: null,
+  state: StudyState.LOADING,
+})
+
+export function load_new():{}
+export function setNextSkill(): void {
+  const session = skillStudySession.value
+
+  if (session.skills.length === 0) {
+    session.skillNow = null
+    session.state = StudyState.NO_WORDS
+    return
+  }
+
+  session.skills = shuffleArray(session.skills)
+
+  session.skillNow = session.skills.shift() ?? null
+  session.result = null
+
+  session.state = StudyState.STUDY
+}
+
+export async function resultSkill(result: boolean): Promise<void> {
+  const session = skillStudySession.value
+  const skill = session.skillNow
+
+  if (skill === null) return
+
+  session.result = result
+
+  await request({
+    url: '/save_result_skill',
+    method: 'POST',
+    body: {
+      skill_id: skill.id,
+      result,
+    },
+  })
+
+  setNextSkill()
+}

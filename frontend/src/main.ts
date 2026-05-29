@@ -4,5 +4,4 @@ import {saveTokenFromUrl} from "./api";
 import App from "./App.vue";
 
 saveTokenFromUrl()
-
 createApp(App).mount('#app')//запуск прилы.

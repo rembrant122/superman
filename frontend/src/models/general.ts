@@ -7,7 +7,6 @@ export type BaseCardModel = {
   // description?: string | null
 
 }
-
 export type CardListModel = {
   cards: BaseCardModel[]
 }

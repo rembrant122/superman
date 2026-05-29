@@ -17,7 +17,7 @@
       </div>
 
       <div class="study-card__buttons">
-        <button class="study-card__button" @click="loadNew('MEMORIZE')">
+        <button class="study-card__button" :disabled="isProcessing" @click="runAction(() => loadNew())">
           Подгрузить ещё
         </button>
       </div>
@@ -48,17 +48,17 @@
       </div>
 
       <div v-if="!session.isShownBack" class="study-card__buttons">
-        <button class="study-card__button" @click="processAnswer(true)">
+        <button class="study-card__button" :disabled="isProcessing" @click="runAction(() => resultWord(true))">
           Помню
         </button>
 
-        <button class="study-card__button" @click="processAnswer(false)">
+        <button class="study-card__button" :disabled="isProcessing" @click="runAction(() => resultWord(false))">
           Не помню
         </button>
       </div>
 
       <div v-else class="study-card__buttons">
-        <button class="study-card__button" @click="setNextWord()">
+        <button class="study-card__button" :disabled="isProcessing" @click="runAction(setNextWord)">
           Дальше
         </button>
       </div>
@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import '../styles/WordCard.css'
 
-import { computed } from 'vue'
+import {computed, ref} from 'vue'
 import { StudyState } from '../models/words'
 
 import {
@@ -79,6 +79,18 @@ import {
   wordStudySession,
 } from '../services/cardsManger'
 
+const isProcessing = ref(false)
+async function runAction(action: () => Promise<unknown>): Promise<void> {
+  if (isProcessing.value) return
+
+  isProcessing.value = true
+
+  try {
+    await action()
+  } finally {
+    isProcessing.value = false
+  }
+}
 const session = computed(() => wordStudySession.value)
 
 const currentWord = computed(() => session.value.currentCard?.card ?? null)
@@ -91,11 +103,4 @@ const mainText = computed((): string => {
   return word.translate
 })
 
-async function processAnswer(result: boolean): Promise<void> {
-  await resultWord(result)
-
-  if (result) {
-    await setNextWord()
-  }
-}
 </script>

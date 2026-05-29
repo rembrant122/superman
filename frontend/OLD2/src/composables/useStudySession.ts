@@ -147,7 +147,7 @@ export function useStudySession():StudyCardState {
       isLoading.value = false
     }
   }
-
+главный текст - про любовь
   return {
     mainText,
     extraText,

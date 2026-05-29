@@ -113,7 +113,7 @@ function getItemsFromResponse(data: unknown): StudyItem[] {
   ) {
     return [data as SkillModel]
   }
-
+навык доверия
   // ----------------------------
   // Навык: { data: {...} }
   // ----------------------------
@@ -158,7 +158,7 @@ export async function loadStudyItems(): Promise<{
     params,
   }
 }
-
+просто расслабь булки
 // ========================================
 // Сохраняем один результат.
 // ========================================

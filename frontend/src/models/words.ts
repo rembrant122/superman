@@ -9,13 +9,18 @@ export type WordModelApi = BaseCardModel & {
 }
 
 export type ListWordsModelApi = {
-  stage_type: StageType
+    // stage_type: StageType
     // REPEAT='REPEAT'
     // MEMORIZE='MEMORIZE'
 
   words: WordModelApi[]
 }
-
+export type ListWordsModelApiOutput = {
+  words: BaseCardModel[]
+}
+export type ListWordsIdModel = {
+  words_id: number[]
+}
 export type WordStudyState = {
 
   card: WordModelApi
@@ -43,7 +48,7 @@ export type WordStudySession = {
   // isFinished: boolean
 
   timesShown?:number|null //если стадия запомниания - то тут устанавливаем сколько раз уже была показана
-  stage_type: StageType|null
+  stageType: StageType|null
 
   isShownBack:boolean|null//если true то показывается целиковая карточка
 

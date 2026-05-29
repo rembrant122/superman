@@ -2,7 +2,7 @@ import secrets
 from datetime import datetime, UTC
 from typing import cast
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, String, and_, func
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, and_, func, or_
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import Integer
 from sqlalchemy.orm import (
@@ -79,6 +79,9 @@ class Word(AutomatisationDataBase):
         default=now_utc,
     )
 
+    # def get_for_repeat(self,dictionary:'Dictionary'):
+    #     ...
+
     def update_history(self, success: bool) -> None:
         steps = get_next_step_time(self.stage, success)
         self.stage = steps.step
@@ -117,6 +120,17 @@ class Skill(AutomatisationDataBase):
         default=now_utc,
     )
 
+    start_depend_of_skill_id: Mapped[int | None] = mapped_column(
+        Integer,
+        ForeignKey("skills.id"),
+        nullable=True,
+    )
+
+    start_depend_of_skill: Mapped["Skill | None"] = relationship(
+        "Skill",
+        remote_side="Skill.id",
+    )
+
     def update_history(self, success: bool) -> None:
         steps = get_next_step_time(self.stage, success)
         self.stage = steps.step
@@ -147,8 +161,8 @@ class CommonDictionary(AutomatisationDataBase):
     #         Dictionary.words.has
     #             (
     #             and_(
-    #                 Word.next_date_time_for_repeat <= func.now(),
-    #                 Word.stage > 0,
+    #                 WordId.next_date_time_for_repeat <= func.now(),
+    #                 WordId.stage > 0,
     #                 )
     #             )
     #     ),
@@ -181,8 +195,8 @@ class Dictionary(AutomatisationDataBase):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
 
     name: Mapped[str] = mapped_column(String)
-
-    ready_words: Mapped[list["Word"]] = relationship(
+    #для повторен:
+    ready_words_repeat: Mapped[list["Word"]] = relationship(
         "Word",
         primaryjoin=lambda: and_(
             Dictionary.id == Word.dict_id,
@@ -277,11 +291,11 @@ def delete_skill(session: Session,user: User, skill_name: str) -> None:
     Skill.find_by(session,user_id=user.id, skill_name=skill_name).first().delete(session)
 
 
-def get_list_words_for_memorize(session,
-                                common_dictionary_id:
-                                int,user_id: int,
-                                limit: int = 5,
-                                ) -> list[Word]:
+def get_list_words_for_memorize_from_db(session,
+                                        common_dictionary_id:
+                                int, user_id: int,
+                                        limit: int = 5,
+                                        ) -> list[Word]:
     return (
         session.query(Word)
         .join(Dictionary, Dictionary.id == Word.dict_id)
@@ -306,16 +320,23 @@ def get_users_with_ready_words_for_notify(session:Session) -> list[User]:
     return cast(list[User],l_us)
 
 
-def get_skill_for_memorize_db(session,user_id: int) -> Skill | None:
+def get_skill_for_memorize_db(session, user_id: int, stage_depend_skill_for_get=5) -> Skill | None:
     return (
         session.query(Skill)
+        .outerjoin(
+            Skill.start_depend_of_skill,
+        )
         .filter(
             Skill.user_id == user_id,
             Skill.stage == 0,
+            #берем если нет зависмостей от других или зависимость больше
+            or_(
+                Skill.start_depend_of_skill_id.is_(None),
+                Skill.start_depend_of_skill.has(Skill.stage >= stage_depend_skill_for_get),
+            ),
         )
         .first()
     )
-
 
 def add_words(session:Session,
     common_dct: CommonDictionary,
@@ -357,6 +378,7 @@ def get_skill_for_repeat_db(session:Session,user_id: int) -> Skill | None:
         )
         .first()
     )
+
 def get_users_with_ready_words(session: Session, common_dictionary_id: int) -> list[User]:
     l_us=(
         session.query(User)

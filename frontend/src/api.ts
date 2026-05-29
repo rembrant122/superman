@@ -37,7 +37,6 @@ export async function request<T>(options: {
       ? JSON.stringify(options.body)
       : undefined,
   })
-
   return await res.json()
 }
 // export async function request<T>(options: {

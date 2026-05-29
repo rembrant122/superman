@@ -33,15 +33,19 @@ function getStartStageType(): StageType {
 
 //запуск прилы
 onMounted(async (): Promise<void> => {
+  console.log('Приложение запущено')
+
   try {
-    saveTokenFromUrl()//сохр токен в локал сторидж
+    saveTokenFromUrl() // сохр токен в локал сторидж
+    console.log('Токен сохранён')
 
-    const stageType = getStartStageType()//определяем что делаем (запомин, повтор)
+    wordStudySession.value.stageType = getStartStageType() // определяем что делаем
+    console.log('Тип режима:', wordStudySession.value.stageType)
 
-    await loadNew(stageType)//загрузка слов и показ
+    await loadNew() // загрузка слов и показ
 
-  } catch (error) {//ошибка
-    console.error(error)
+  } catch (error) { // ошибка
+    console.error('Ошибка:', error)
 
     wordStudySession.value.state = StudyState.ERROR
   }

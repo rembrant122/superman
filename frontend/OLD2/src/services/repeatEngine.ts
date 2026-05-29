@@ -50,7 +50,7 @@ export class RepeatEngine<TItem extends RepeatEngineItem> {
     this.removeItemFromPending(item.id)
     this.moveToNextItem()
   }
-
+не надо повторять ошибки, надо радоваться
   private removeItemFromPending(itemId: number): void {
     this.pendingStageItemsValue = this.pendingStageItemsValue.filter((item) => item.id !== itemId)
   }
