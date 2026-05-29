@@ -80,6 +80,7 @@ import {
 } from '../services/cardsManger'
 
 const isProcessing = ref(false)
+
 async function runAction(action: () => Promise<unknown>): Promise<void> {
   if (isProcessing.value) return
 
@@ -91,7 +92,8 @@ async function runAction(action: () => Promise<unknown>): Promise<void> {
     isProcessing.value = false
   }
 }
-const session = computed(() => wordStudySession.value)
+
+const session =  wordStudySession
 
 const currentWord = computed(() => session.value.currentCard?.card ?? null)
 
@@ -99,8 +101,10 @@ const mainText = computed((): string => {
   const word = currentWord.value
   if (!word) return ''
 
-  if (session.value.toTranslateWord) return word.word
-  return word.translate
+  if (session.value.toTranslateWord)
+    return word.word
+    return word.translate
+
 })
 
 </script>

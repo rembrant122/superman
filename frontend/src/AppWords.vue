@@ -13,7 +13,7 @@ import WordCard from './components/WordCard.vue'
 import {loadNew, wordStudySession,} from './services/cardsManger'
 
 import {StudyState} from './models/words'
-import {getStartStageType} from "@/getStartStageType";
+import {getStartStageType} from "./getStartStageType";
 
 //запуск прилы
 onMounted(async (): Promise<void> => {
