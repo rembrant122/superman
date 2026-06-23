@@ -11,8 +11,9 @@ from db.db_all import Word, get_list_words_for_memorize_from_db
 from db.db_basic import session_scope
 from superman.models.models_superman import AutomatisationBaseModel, WordModel, WordId, ListWordsModel, ListWordsIdModel
 from settings import COMMON_DIC_ID
-from steps import get_next_step_time
 from typing import cast
+
+from superman.superman_controller.steps import get_next_step_time
 
 T = TypeVar("T", bound=AutomatisationBaseModel)
 

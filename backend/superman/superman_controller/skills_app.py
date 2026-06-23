@@ -6,8 +6,8 @@ from app_flask.save_and_send_app import send_message
 from db.db_all import Skill, get_skill_for_memorize_db, get_skill_for_repeat_db
 from db.db_basic import session_scope
 from superman.models.models_superman import ResultRepeatSkill, SkillModel
-from random_words import prepare_skills
-from steps import get_next_step_time
+from superman.superman_controller.random_words import prepare_skills
+from superman.superman_controller.steps import get_next_step_time
 
 skills_blueprint = APIBlueprint("skills", __name__)
 

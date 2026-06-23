@@ -32,7 +32,6 @@ class User(AutomatisationDataBase
 
     token: Mapped[str] = mapped_column(String, default=generate_token)
 
-
     notify_for_skills_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     notify_for_skills_already_sent: Mapped[bool] = mapped_column(
         Boolean,
