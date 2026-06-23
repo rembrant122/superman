@@ -4,7 +4,7 @@ from typing import cast
 from sqlalchemy import String, and_, func, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship, Session
 
-from db_all import Skill, Dictionary, Word
+from db.db_all import Skill, Dictionary, Word
 from db_basic import AutomatisationDataBase
 from zoar_user import UserZoar
 
