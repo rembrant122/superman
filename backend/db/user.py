@@ -5,7 +5,6 @@ from sqlalchemy import String, and_, func, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship, Session
 
 from db.db_basic import AutomatisationDataBase
-from db.zoar_user import UserZoar
 
 if TYPE_CHECKING:
     from db.db_all import Skill, Dictionary, Word
@@ -43,12 +42,13 @@ class UserSuperman(AutomatisationDataBase):
     ...
 
 
-class User(UserSuperman,UserZoar):
+class User(UserSuperman,
+           # UserZoar
+           ):
     __tablename__ = "users"
 
     tg_id: Mapped[str] = mapped_column(String, unique=True)
     tg_login: Mapped[str] = mapped_column(String, default="")
-
 
     token: Mapped[str] = mapped_column(String, default=generate_token)
 
