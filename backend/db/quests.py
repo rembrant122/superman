@@ -3,13 +3,14 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, Boolean, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from my_database import MyDataBase
-from table_names import TableNames
+
+from db.db_basic import AutomatisationDataBase
+from db.table_names import TableNames
 
 if TYPE_CHECKING:
 
     from basic_tables_zoar import Media, Meetup,Branches
-    from src.db.resourses import Resources, Artefacts
+    from db.resourses import Resources, Artefacts
     from user import UserQuest
 
 
@@ -26,7 +27,7 @@ if TYPE_CHECKING:
 #     artefact: Mapped['Artefacts'] = relationship('Artefacts', uselist=False)
 
 
-class ListChoiceQuests(MyDataBase):
+class ListChoiceQuests(AutomatisationDataBase):
 
     """
     по сути - спиок кнопок
@@ -52,7 +53,7 @@ class ListChoiceQuests(MyDataBase):
         back_populates="parent_links",
     )
 
-class StepsOfQuest(MyDataBase):
+class StepsOfQuest(AutomatisationDataBase):
 
     """
     """
@@ -97,7 +98,7 @@ class StepsOfQuest(MyDataBase):
     def get_quest_by_parent_id(cls, parent_id: int):
         return cls.find_by(id=parent_id).first()
 
-class Quest(MyDataBase):
+class Quest(AutomatisationDataBase):
 
     __tablename__ = TableNames.quests
 

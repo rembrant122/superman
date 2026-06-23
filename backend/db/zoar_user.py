@@ -1,9 +1,18 @@
-from sqlalchemy import Boolean, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+import datetime
+from typing import TYPE_CHECKING, Optional
 
-from backend.db.table_names import TableNames
-from db_basic import AutomatisationDataBase
-from user import User
+from sqlalchemy import DateTime, Integer, String, Text, and_, func, Boolean, ForeignKey, Enum as SQLEnum
+from sqlalchemy.orm import Mapped, mapped_column, relationship, Session
+
+from db.quests import Quest, StepsOfQuest
+from db.resourses import Resources
+from db.basic_tables_zoar import Branches, Media, Meetup
+from enums import StepMeetup, UserQuestStage
+from db.table_names import TableNames
+from db.db_basic import AutomatisationDataBase
+
+if TYPE_CHECKING:
+    from db.user import User
 
 
 class MeetupUsers(AutomatisationDataBase):
@@ -37,12 +46,10 @@ class UserQuest(AutomatisationDataBase):
     step_now_id:Mapped[int]=mapped_column(ForeignKey(TableNames.steps_of_quest.id))
     step_now:Mapped['StepsOfQuest'] = relationship('StepsOfQuest', uselist=False)
 
-class UserStepQuest(MyDataBase):
+class UserStepQuest(AutomatisationDataBase):
+    __tablename__ = "user_step_quests"
 
-
-    ...
-
-def reg_user_by_tg_id(tg_id: str,curator_id)->User:
+def reg_user_by_tg_id(tg_id: str,curator_id)->"User":
 
     resource = Resources.add_something(is_commit=False)
 
@@ -76,7 +83,7 @@ class Avatars(AutomatisationDataBase):
 
 
     @classmethod
-    def new_avatar_db(cls,branch:'Branches',user:User)-> 'Avatars':
+    def new_avatar_db(cls,branch:'Branches',user:"User")-> 'Avatars':
         media_avatar_db = Media.add_something()
 
         avatar= Avatars.add_something(branch=branch, media=media_avatar_db,user=user)
@@ -103,7 +110,7 @@ class UserZoar(AutomatisationDataBase):
 
     user_name: Mapped[Optional[str]] = mapped_column(Text)
 
-    reg_datetime: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    reg_datetime: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc)) # type: ignore
 
     first_time: Mapped[bool] = mapped_column(Boolean, default=True)
 

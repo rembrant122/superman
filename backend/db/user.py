@@ -1,12 +1,14 @@
 import secrets
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 from sqlalchemy import String, and_, func, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship, Session
 
-from db.db_all import Skill, Dictionary, Word
-from db_basic import AutomatisationDataBase
-from zoar_user import UserZoar
+from db.db_basic import AutomatisationDataBase
+from db.zoar_user import UserZoar
+
+if TYPE_CHECKING:
+    from db.db_all import Skill, Dictionary, Word
 
 
 def generate_token() -> str:
