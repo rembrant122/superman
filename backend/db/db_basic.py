@@ -14,7 +14,7 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
-from backend.settings import DATABASE_URL
+from settings import DATABASE_URL
 
 Base = declarative_base()
 

@@ -1,0 +1,15 @@
+Обновить с GitHub:
+
+git fetch origin
+git reset --hard origin/master
+
+
+Выложить изменения:
+
+git add .
+git commit -m "Котики любимые"
+git push origin master
+
+Проверить состояние:
+
+git status

@@ -4,15 +4,15 @@ from typing import Optional, TYPE_CHECKING
 from sqlalchemy import Text, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from my_database import MyDataBase, engine, Base
-from table_names import TableNames
+from db.db_basic import AutomatisationDataBase, engine, Base
+from db.table_names import TableNames
 
 if TYPE_CHECKING:
     from user import User,MeetupUsers
     from resourses import Resources
 
 
-class Meetup(MyDataBase):
+class Meetup(AutomatisationDataBase):
     """
     пока вся инфа о месте и тд - кладем в медиа чтообы отобразить на фроенте
     """
@@ -38,14 +38,14 @@ class Meetup(MyDataBase):
     add_resources: Mapped['Resources'] = relationship('Resources')
 
 
-class Branches(MyDataBase):
+class Branches(AutomatisationDataBase):
 
     __tablename__=TableNames.branches
 
     media_id: Mapped[int] = mapped_column(ForeignKey(TableNames.media.id))
     media: Mapped['Media'] = relationship('Media')
 
-class Wiki(MyDataBase):
+class Wiki(AutomatisationDataBase):
     __tablename__ = TableNames.wiki
 
     head: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -68,7 +68,7 @@ class Wiki(MyDataBase):
         back_populates='upper_wiki'
     )
 
-class Media(MyDataBase):
+class Media(AutomatisationDataBase):
     __tablename__ = TableNames.media
 
     head_text: Mapped[Optional[str]] = mapped_column(Text, nullable=True)

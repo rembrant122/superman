@@ -1,19 +1,21 @@
 from sqlalchemy import ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from basic_tables import Media
-from my_database import MyDataBase
-from table_names import TableNames
+from db.basic_tables_zoar import Media
+from db.db_basic import AutomatisationDataBase
 
 
-class Artefacts(MyDataBase):
+from db.table_names import TableNames
+
+
+class Artefacts(AutomatisationDataBase):
 
     __tablename__ = TableNames.artefacts
 
     media_id: Mapped[int] = mapped_column(ForeignKey(TableNames.media.id))
     media: Mapped['Media'] = relationship('Media')
 
-class ListArtefacts(MyDataBase):
+class ListArtefacts(AutomatisationDataBase):
 
     __tablename__ = TableNames.list_artefacts
 
@@ -25,7 +27,7 @@ class ListArtefacts(MyDataBase):
 
     artefact: Mapped['Artefacts'] = relationship('Artefacts', uselist=False)
 
-class Resources(MyDataBase):
+class Resources(AutomatisationDataBase):
     """
     ХРАНИЛИЩЕ ресурсов для чего либо:
         юзеров
