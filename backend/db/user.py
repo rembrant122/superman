@@ -13,9 +13,25 @@ if TYPE_CHECKING:
 def generate_token() -> str:
     return secrets.token_hex(16)
 
+#
+# class UserSuperman(AutomatisationDataBase):
+#     __abstract__ = True
+#
+#
+#     ...
 
-class UserSuperman(AutomatisationDataBase):
-    __abstract__ = True
+
+class User(AutomatisationDataBase
+    # UserSuperman,
+           # UserZoar
+           ):
+    __tablename__ = "users"
+
+    tg_id: Mapped[str] = mapped_column(String, unique=True)
+    tg_login: Mapped[str] = mapped_column(String, default="")
+
+    token: Mapped[str] = mapped_column(String, default=generate_token)
+
 
     notify_for_skills_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     notify_for_skills_already_sent: Mapped[bool] = mapped_column(
@@ -38,20 +54,6 @@ class UserSuperman(AutomatisationDataBase):
         viewonly=True,
         lazy="select",
     )
-
-    ...
-
-
-class User(UserSuperman,
-           # UserZoar
-           ):
-    __tablename__ = "users"
-
-    tg_id: Mapped[str] = mapped_column(String, unique=True)
-    tg_login: Mapped[str] = mapped_column(String, default="")
-
-    token: Mapped[str] = mapped_column(String, default=generate_token)
-
 
 def register_user(session: Session,tg_id: int, tg_login: str) -> "User":
     user = User.find_by(session,tg_id=str(tg_id)).first()
