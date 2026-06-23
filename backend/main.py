@@ -16,7 +16,7 @@ async def main() -> None:
 
     # бот
     await run_bot()
-
+ 
 if __name__ == "__main__":
     asyncio.run(main())
 #12345

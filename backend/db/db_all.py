@@ -14,8 +14,6 @@ from sqlalchemy.orm import relationship
 from enums import SkillType
 from db.db_basic import AutomatisationDataBase, engine
 from db.user import User
-from models_superman import WordModel
-from steps import get_next_step_time
 
 
 def now_utc() -> datetime:
