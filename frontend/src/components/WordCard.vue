@@ -70,7 +70,6 @@
 import '../styles/WordCard.css'
 
 import {computed, ref} from 'vue'
-import { StudyState } from '../models/words'
 
 import {
   loadNew,
@@ -78,6 +77,7 @@ import {
   setNextWord,
   wordStudySession,
 } from '../services/cardsManger'
+import {StudyState} from "@/models/StudyState";
 
 const isProcessing = ref(false)
 

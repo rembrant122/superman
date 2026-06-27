@@ -60,29 +60,35 @@ class Skill(AutomatisationDataBase):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
     user: Mapped["User"] = relationship("User", back_populates="skills")
 
-    description: Mapped[str] = mapped_column(String)
-    instruction: Mapped[str] = mapped_column(String)
-    skill_name: Mapped[str] = mapped_column(String, index=True)
-
-    count_elements: Mapped[int | None] = mapped_column(Integer)  # если ммного например слов рандомно показывать - то сколько
-
-    time_show: Mapped[int] = mapped_column(Integer)  # сколько времени показывать
-    time_for_remember: Mapped[int] = mapped_column(Integer)  # сколько времени запоминать
-
-    skill_type: Mapped[SkillType] = mapped_column(SQLEnum(SkillType))
-
-    notify_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
-    notify_already_sent: Mapped[bool] = mapped_column(
-        Boolean,
-        default=False,
-    )  # после того как отправили - ставит True, после повторения - снова False
-
     stage: Mapped[int] = mapped_column(Integer, default=0)  # 0 = стадия запоминания
+
     next_date_time_for_repeat: Mapped[datetime] = mapped_column(
         DateTime,
         index=True,
         default=now_utc,
     )
+
+    description: Mapped[str] = mapped_column(String)
+    instruction: Mapped[str] = mapped_column(String)
+    skill_name: Mapped[str] = mapped_column(String, index=True)
+
+    notify_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    notify_already_sent: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+    )  # после того как отправили - ставит True, после повторения - снова False
+
+    count_elements: Mapped[int | None] = mapped_column(Integer)  # если ммного например слов рандомно показывать - то сколько
+
+    skill_type: Mapped[SkillType] = mapped_column(SQLEnum(SkillType))
+
+    # ТО ЧТО ДАЛЕЕ - ПОКА НЕ ЮЗАЕМ
+
+
+
+    time_show: Mapped[int] = mapped_column(Integer)  # сколько времени показывать
+    time_for_remember: Mapped[int] = mapped_column(Integer)  # сколько времени запоминать
 
     start_depend_of_skill_id: Mapped[int | None] = mapped_column(
         Integer,

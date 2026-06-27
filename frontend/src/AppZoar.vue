@@ -12,8 +12,8 @@ import WordCard from './components/WordCard.vue'
 
 import {loadNew, wordStudySession,} from './services/cardsManger.ts'
 
-import {StudyState} from './models/words.ts'
 import {getStartStageType} from "./getStartStageType.ts";
+import {StudyState} from "@/models/StudyState";
 
 //запуск прилы
 onMounted(async (): Promise<void> => {

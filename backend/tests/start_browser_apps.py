@@ -11,6 +11,6 @@ def build_url(app: str, repeat: bool) -> str:
 if __name__ == "__main__":
     # выбери что открыть
     # webbrowser.open(build_url("eng_words", True))   # repeat words
-    webbrowser.open(build_url("eng_words", False))  # memor words
+    # webbrowser.open(build_url("eng_words", False))  # memor words
     # webbrowser.open(build_url("skills", True))      # repeat skills
-    # webbrowser.open(build_url("skills", False))     # memor skills
+    webbrowser.open(build_url("skills", False))     # memor skills

@@ -15,7 +15,8 @@ from db.db_basic import session_scope
 from superman.models.models_superman import parse_words_string
 
 from db.db_all import Dictionary, add_words, CommonDictionary
-from db.user import User, get_users_with_ready_words_for_notify
+from db.user import User
+from db.repo import get_users_with_ready_words_for_notify_skills
 from settings import TEXT_STARt_ENG_BOT, COMMON_DIC_ID, TOKEN_WORDS_ENG
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
@@ -82,7 +83,7 @@ async def start(message: Message) -> None:
 async def remind_notif():
     with session_scope() as session:
 
-        users:list[User]=get_users_with_ready_words_for_notify(session)
+        users:list[User]=get_users_with_ready_words_for_notify_skills(session)
 
         for u in users:
             dct:Dictionary=Dictionary.find_by(session,user_id=u.id, common_dictionary_id=COMMON_DIC_ID).first()

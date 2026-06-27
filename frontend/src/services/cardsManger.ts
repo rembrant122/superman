@@ -29,7 +29,7 @@
 
 import { ref } from 'vue'
 import { request } from '../api'
-import {ListWordsIdModel, StudyState} from '../models/words'
+import {ListWordsIdModel} from '../models/words'
 
 import type {BaseCardModel, StageType} from '../models/general'
 import type {
@@ -39,6 +39,7 @@ import type {
   WordStudyState,
 } from '../models/words'
 import {shuffleArray} from "./shuffleArray";
+import {StudyState} from "../models/StudyState";
 
 export const wordStudySession = ref<WordStudySession>({
   toTranslateWord: false,

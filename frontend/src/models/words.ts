@@ -1,4 +1,5 @@
 import {BaseCardModel, StageType} from "./general";
+import {StudyState} from "./StudyState";
 // api.ts
 
 export type WordModelApi = BaseCardModel & {
@@ -29,13 +30,6 @@ export type WordStudyState = {
 
   isRepeatResultSent: boolean| null //уже отправлено инфо о состоянии
 
-}
-export enum StudyState {
-  LOADING = 'LOADING',
-  STUDY = 'STUDY',
-  NO_WORDS = 'NO_WORDS',
-  ASK_NEW_WORDS = 'ASK_NEW_WORDS',//ЗАПРОС НУЖНО ЛИ ЕЩЁ СЛОВА ДЛЛЯ ЗАПОМНН
-  ERROR='ERROR'
 }
 
 export type WordStudySession = {
