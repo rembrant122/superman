@@ -5,19 +5,28 @@ import {request} from "../api";
 import {shuffleArray} from "./shuffleArray";
 
 import {StudyState} from "../models/StudyState";
+import {wordStudySession} from "./cardsManger";
 
 export const skillStudySession = ref<SkillStudySession>({
-  skills: [],
+  // skills: [],
   skillNow: null,
   result: null,
   state: StudyState.LOADING,
+
 })
 
 //
-// export async function loadNewSkill(): void{
-//
-// }
-//
+export async function loadNewSkill(): void{
+    const session = skillStudySession.value
+
+
+
+
+
+
+
+}
+
 //
 // export function setNextSkill(): void {
 //   const session = skillStudySession.value

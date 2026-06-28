@@ -11,12 +11,13 @@ def run_flask() -> None:
     app.run(host=HOST, port=PORT, debug=False)
 
 async def main() -> None:
-    # Flask в отдельном потоке
-    threading.Thread(target=run_flask, daemon=True).start()
+    await asyncio.gather(
+        asyncio.to_thread(run_flask),
+        run_bot(),
+    )
 
-    # бот
-    await run_bot()
- 
+
+
 if __name__ == "__main__":
     asyncio.run(main())
 #12345

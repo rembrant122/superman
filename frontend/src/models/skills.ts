@@ -1,4 +1,5 @@
 import {StudyState} from "./StudyState";
+import {StageType} from "./general";
 
 export enum SkillType {
   LIST_WORDS_FOR_MEMORIZ = 'LIST_WORDS_FOR_MEMORIZ',
@@ -25,9 +26,10 @@ export type SkillModel = {
 
 export type SkillStudySession={
 
-  skills:SkillModel[]
+  // skills:SkillModel[]
   skillNow:SkillModel|null
   result:boolean|null
   state: StudyState
+  stageType: StageType|null
 
 }
