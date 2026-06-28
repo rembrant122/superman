@@ -32,8 +32,8 @@ def get_skill_for_repeat():
     method="get",
     output_model=SkillModel,
 )
-#
-# def get_skill_for_memorize():
+
+def get_skill_for_memorize():
 #     with session_scope() as session:
 #
 #         user = get_user(session)
