@@ -34,13 +34,13 @@ def get_skill_for_repeat():
 )
 
 def get_skill_for_memorize():
-#     with session_scope() as session:
-#
-#         user = get_user(session)
-#         skill_db = get_skill_for_memorize_db(session, user.id)
-#         skill=prepare_skills(skill_db)
-#
-#     return send_message(skill)
+    with session_scope() as session:
+
+        user = get_user(session)
+        skill_db = get_skill_for_memorize_db(session, user.id)
+        skill=prepare_skills(skill_db)
+
+    return send_message(skill)
 
 @api_route(
     skills_blueprint,

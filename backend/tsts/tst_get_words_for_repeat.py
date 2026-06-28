@@ -1,10 +1,9 @@
-from get_tst_user import get_tst_user
+from backend.tests.get_tst_user import get_tst_user
 
+from bots.web_app_url import repeat_web_app, memor_web_app
 from tst_run_app import tst_run_app
-from web_app_url import memor_web_app
 
-
-def tst_get_words_for_memor():
+def tst_get_words_for_repeat():
 
     print('\n\nне забудь забилдить фронт!'
           '\n\nЗАПУСКАЕМ ПРИЛУ!'
@@ -14,10 +13,10 @@ def tst_get_words_for_memor():
     U = get_tst_user()
     print('показываем для запомин ')
 
-    TST_URL_WORDS_MEMOR = memor_web_app(U)
-    print(TST_URL_WORDS_MEMOR)
+    TST_URL_WORDS_repeat = repeat_web_app(U)
+    print(TST_URL_WORDS_repeat)
 
     input("Нажми Enter для остановки...")
 
 if __name__ == "__main__":
-    tst_get_words_for_memor()#
+    tst_get_words_for_repeat()

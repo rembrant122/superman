@@ -1,6 +1,6 @@
-from get_tst_user import get_tst_user
+from tsts.get_tst_user import get_tst_user
 
-from tst_run_app import tst_run_app
+from tsts.tst_run_app import tst_run_app
 from web_app_url import memor_web_app, memor_web_app_skill
 
 

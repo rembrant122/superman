@@ -27,4 +27,9 @@ MOISEY_TG_ID=271374596
 # DATABASE_URL = f"sqlite:///{BASE_DIR / 'superman.db'}"
 UNIQUE_RUSSIAN_WORDS_PATHS=Path(r'C:\Users\rembr\OneDrive\Desktop\superman\backend\5000_unique_russian.txt')
 
-DATABASE_URL = "sqlite:///C:/Users/rembr/OneDrive/Desktop/superman/backend/superman.db"
+# DATABASE_URL = "sqlite:///C:/Users/rembr/OneDrive/Desktop/superman/backend/superman.db"
+
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+DATABASE_URL = f"sqlite:///{(BASE_DIR / 'superman.db').as_posix()}"
